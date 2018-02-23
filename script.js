@@ -20,8 +20,14 @@ loader.load(
     dog = scene.children[0];
     dog.position.z = -10
     // set dog material
-    var unlit = new THREE.MeshBasicMaterial();
-    console.log(dog.children[0].material)
+    var mesh = dog.children[0];
+    console.log(mesh.material)
+    var unlit = new THREE.MeshBasicMaterial({
+      color: 0xFFFFFF,
+      map: mesh.material.map
+    });
+    mesh.material = unlit;
+    dog.rotateY(3.14159);
   },
   // called when loading is in progresses
   function ( xhr ) {
@@ -39,7 +45,7 @@ loader.load(
 
 function animate() {
   if (dog) {
-    dog.rotateY(-0.1);
+    dog.rotateY(-0.001);
   }
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
