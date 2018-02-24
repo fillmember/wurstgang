@@ -6,12 +6,12 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var dog,skele;
 
 var renderer = new THREE.WebGLRenderer();
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0x248B4D);
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setClearColor( 0x248B4D );
+renderer.setSize( window.innerWidth , window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var controls = new THREE.OrbitControls( camera, renderer.domElement );
+var controls = new THREE.OrbitControls( camera , renderer.domElement );
 
 var loader = new THREE.GLTFLoader();
 
@@ -30,9 +30,11 @@ loader.load(
     unlit.map.encoding = THREE.LinearEncoding
     unlit.needsUpdate = true;
     dog.material = unlit;
-    // Skele Init
-    dog.rotateY(3/4*3)
-    skele.bones[6].rotateY(3/8)
+    // Pose Init
+    // init a very cute pose
+    dog.rotateY(3*0.75)
+    skele.bones[5].rotateY(3/8)
+    skele.bones[6].rotateY(1/8)
     skele.bones[8].rotateY(3/4)
   },
   function ( xhr ) {
@@ -43,7 +45,10 @@ loader.load(
   }
 );
 
-camera.position.set( 0, 4, 15 );
+camera.position.set( 0 , 4 , 15 );
+
+var wagging = new TimelineMax({repeat:-1});
+
 
 function animate() {
   var time = Date.now() * 0.01;
@@ -56,6 +61,6 @@ function animate() {
   }
   controls.update();
 	requestAnimationFrame( animate );
-	renderer.render( scene, camera );
+	renderer.render( scene , camera );
 }
 animate();
