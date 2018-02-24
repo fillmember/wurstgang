@@ -3,3 +3,6 @@ body {
   background:#248B4D;
   position:fixed;
 }
+canvas {
+  cursor: -webkit-grab, grab, move;
+}

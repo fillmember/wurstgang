@@ -12,8 +12,8 @@ var light = new THREE.DirectionalLight( 0xffffff, 1 );
 light.position.set(0,1,0.5)
 
 var controls = new THREE.OrbitControls( camera , renderer.domElement );
-// controls.autoRotate = true
-// controls.autoRotateSpeed = 0.1
+controls.autoRotate = true
+controls.autoRotateSpeed = 0.033
 controls.enableDamping = true
 controls.rotateSpeed = 0.3
 controls.dampingFactor = 0.1
@@ -46,7 +46,7 @@ loader.load(
     dog.material = mat;
     // Pose Init
     // init a very cute pose
-    dog.rotateY(3*0.75)
+    dog.rotateY(3*0.66)
     bones[5].rotateY(3/8)
     bones[6].rotateY(1/8)
     bones[7].rotation.z = -0.1
