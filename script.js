@@ -1,6 +1,6 @@
 var THREE = window.THREE;
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 1000 );
+var camera = new THREE.PerspectiveCamera( 22, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.set( 0 , 0 , 30 );
 var renderer = new THREE.WebGLRenderer();
 renderer.setPixelRatio( window.devicePixelRatio );
@@ -31,7 +31,7 @@ loader.load(
     scene = gltf.scene;
     scene.add(light);
     dog = scene.getObjectByName("Mesh");
-    dog.position.y = -0.5;
+    dog.position.y = -0.4;
     skele = dog.skeleton
     bones = skele.bones
     // Correct material
@@ -49,6 +49,7 @@ loader.load(
     dog.rotateY(3*0.75)
     bones[5].rotateY(3/8)
     bones[6].rotateY(1/8)
+    bones[7].rotation.z = -0.1
     bones[8].rotateY(3/4)
   },
   function ( xhr ) {
@@ -70,6 +71,8 @@ function animate() {
     bones[3].rotation.y = THREE.Math.degToRad( Math.sin(time) * -30 )
     // Looking
     
+    // bones[7]
+    // bones[8].lookAt(camera);
   }
   //
   controls.update();
@@ -87,4 +90,15 @@ window.addEventListener("resize",function(){
   camera.aspect = w / h
   camera.updateProjectionMatrix()
   renderer.setSize( w , h );
+})
+
+// mouse
+var mousePosition = {x:0,y:0};
+window.addEventListener("mousemove",function(evt){
+
+  mousePosition.x = (evt.clientX / window.innerWidth) * 2 - 1;
+  mousePosition.y = -(evt.clientY / window.innerHeight) * 2 + 1;
+  
+  // camera.position + camera.
+
 })
