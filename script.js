@@ -10,6 +10,8 @@ renderer.setClearColor(0xFFFFFF);
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+var controls = new THREE.OrbitControls( camera, renderer.domElement );
+
 var loader = new THREE.GLTFLoader();
 
 loader.load(
@@ -19,8 +21,6 @@ loader.load(
   function ( gltf ) {
     scene = gltf.scene;
     dog = scene.getObjectByName("Mesh");
-    dog.position.z = -7
-    dog.position.y = 0
     skele = dog.skeleton
     // set dog material
     var unlit = new THREE.MeshBasicMaterial({
@@ -32,11 +32,11 @@ loader.load(
     unlit.needsUpdate = true;
     dog.material = unlit;
     //
-    dog.rotateY(3.14159);
+    dog.rotateY(0);
     // Skele Helper
-    var helper = new THREE.SkeletonHelper( dog );
-    helper.material.linewidth = 3;
-    scene.add( helper );
+    // var helper = new THREE.SkeletonHelper( dog );
+    // helper.material.linewidth = 3;
+    // scene.add( helper );
   },
   // called when loading is in progresses
   function ( xhr ) {
@@ -52,13 +52,18 @@ loader.load(
   }
 );
 
+camera.position.set( 0, 4, 15 );
+
 function animate() {
   var time = Date.now() * 0.01;
   if (dog) {
-    
-    THREE.Math.degToRad( 39.231 + Math.sin(time) * 10 )
+
+    skele.bones[1].rotation.y = THREE.Math.degToRad( Math.sin(time) * 10 )
+    skele.bones[2].rotation.y = THREE.Math.degToRad( Math.sin(time) * -20 )
+    skele.bones[3].rotation.y = THREE.Math.degToRad( Math.sin(time) * -30 )
 
   }
+  controls.update();
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
 }
