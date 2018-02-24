@@ -13,20 +13,20 @@ var loader = new THREE.GLTFLoader();
 
 loader.load(
   // resource URL
-  'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fq1.glb?1519406826712',
+  'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519483381059',
   // called when the resource is loaded
   function ( gltf ) {
-    scene.add( gltf.scene.children[0] );
-    dog = scene.children[0];
-    dog.position.z = -10
-    // set dog material
-    var mesh = dog.children[0];
-    console.log(mesh.material.map);
-    var unlit = new THREE.MeshBasicMaterial({
-      color: 0xFFFFFF,
-      map: mesh.material.map,
-    });
-    dog.rotateY(3.14159);
+    scene.add( gltf.scene.children[0]);
+    // dog = scene.children[0];
+    // dog.position.z = -10
+    // // set dog material
+    // var mesh = dog.children[0];
+    // var unlit = new THREE.MeshBasicMaterial({
+    //   color: 0xFFFFFF,
+    //   map: mesh.material.map
+    // });
+    // mesh.material = unlit;
+    // dog.rotateY(3.14159);
   },
   // called when loading is in progresses
   function ( xhr ) {
