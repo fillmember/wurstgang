@@ -71,8 +71,6 @@ function animate() {
     bones[3].rotation.y = THREE.Math.degToRad( Math.sin(time) * -30 )
     // Looking
     
-    // bones[7]
-    // bones[8].lookAt(camera);
   }
   //
   controls.update();
