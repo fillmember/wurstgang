@@ -8,11 +8,16 @@ renderer.setClearColor( 0x248B4D );
 renderer.setSize( window.innerWidth , window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+var light = new THREE.PointLight( 0xFF0000 , 1 , 100 ); // soft white light
+light.position.set(50,50,50);
+scene.add( light );
+
 var controls = new THREE.OrbitControls( camera , renderer.domElement );
 controls.autoRotate = true
 controls.autoRotateSpeed = 0.1
 controls.enableDamping = true
-controls.dampingFactor = 0.5
+controls.rotateSpeed = 0.3
+controls.dampingFactor = 0.1
 controls.enablePan = false
 controls.enableZoom = false
 controls.minPolarAngle = 0.15;
@@ -30,14 +35,23 @@ loader.load(
     skele = dog.skeleton
     bones = skele.bones
     // set an unlit material
-    var unlit = new THREE.MeshBasicMaterial({
+    // var unlit = new THREE.MeshBasicMaterial({
+    //   color: 0xFFFFFF,
+    //   map: dog.material.map,
+    //   skinning: true
+    // });
+    
+    dog.material.map.encoding = THREE.LinearEncoding
+
+    var unlit = new THREE.MeshLambertMaterial({
       color: 0xFFFFFF,
       map: dog.material.map,
-      skinning: true
-    });
-    unlit.map.encoding = THREE.LinearEncoding
-    unlit.needsUpdate = true;
+      skinning: true,
+      emissive: 0x333333,
+      emissiveMap: dog.material.map
+    })
     dog.material = unlit;
+    
     // Pose Init
     // init a very cute pose
     dog.rotateY(3*0.75)
@@ -53,6 +67,8 @@ loader.load(
   }
 );
 
+// onEnterFrame
+
 function animate() {
   var time = Date.now() * 0.01;
   if (dog) {
@@ -66,3 +82,10 @@ function animate() {
 	renderer.render( scene , camera );
 }
 animate();
+
+// resize
+
+window.addEventListener("resize",function(){
+  camera.ratio = window.innerWidth / window.innerHeight
+  renderer.setSize( window.innerWidth , window.innerHeight );
+})
