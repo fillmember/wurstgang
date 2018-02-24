@@ -21,12 +21,11 @@ loader.load(
     dog.position.z = -10
     // set dog material
     var mesh = dog.children[0];
-    console.log(mesh.material)
+    console.log(mesh.material.map);
     var unlit = new THREE.MeshBasicMaterial({
       color: 0xFFFFFF,
-      map: mesh.material.map
+      map: mesh.material.map,
     });
-    mesh.material = unlit;
     dog.rotateY(3.14159);
   },
   // called when loading is in progresses
