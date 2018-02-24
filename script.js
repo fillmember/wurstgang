@@ -14,7 +14,7 @@ var loader = new THREE.GLTFLoader();
 
 loader.load(
   // resource URL
-  'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519483381059',
+  'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519484412264',
   // called when the resource is loaded
   function ( gltf ) {
     scene.add( gltf.scene );
@@ -29,8 +29,7 @@ loader.load(
     });
     mesh.material = unlit;
     dog.rotateY(3.14159);
-    dog.getObjectByName("EyeL").add(eye())
-    dog.getObjectByName("EyeR").add(eye())
+    console.log(scene.getObjectByName("ArmL_0"))
   },
   // called when loading is in progresses
   function ( xhr ) {
@@ -48,7 +47,8 @@ loader.load(
 
 function animate() {
   if (dog) {
-    dog.rotateY(-0.001);
+    // dog.rotateY(-0.001);
+    // scene.getObjectByName("ArmL-0")
   }
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
