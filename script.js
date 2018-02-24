@@ -6,6 +6,7 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var dog = null;
 
 var renderer = new THREE.WebGLRenderer();
+renderer.setClearColor(0xFFFFFF);
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -16,17 +17,20 @@ loader.load(
   'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519483381059',
   // called when the resource is loaded
   function ( gltf ) {
-    scene.add( gltf.scene.children[0]);
-    // dog = scene.children[0];
-    // dog.position.z = -10
-    // // set dog material
-    // var mesh = dog.children[0];
-    // var unlit = new THREE.MeshBasicMaterial({
-    //   color: 0xFFFFFF,
-    //   map: mesh.material.map
-    // });
-    // mesh.material = unlit;
-    // dog.rotateY(3.14159);
+    scene.add( gltf.scene );
+    dog = scene.getObjectByName("Root_Wurstgang");
+    dog.position.z = -10
+    dog.position.y = 0
+    var mesh = dog.getObjectByName("Mesh");
+    // set dog material
+    var unlit = new THREE.MeshBasicMaterial({
+      color: 0xFFFFFF,
+      map: mesh.material.map
+    });
+    mesh.material = unlit;
+    dog.rotateY(3.14159);
+    dog.getObjectByName("EyeL").add(eye())
+    dog.getObjectByName("EyeR").add(eye())
   },
   // called when loading is in progresses
   function ( xhr ) {
