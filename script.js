@@ -6,7 +6,8 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var dog,skele;
 
 var renderer = new THREE.WebGLRenderer();
-renderer.setClearColor(0xFFFFFF);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(0x248B4D);
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
