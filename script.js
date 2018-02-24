@@ -14,12 +14,12 @@ var loader = new THREE.GLTFLoader();
 
 loader.load(
   // resource URL
-  'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519485231379',
+  'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519485752419',
   // called when the resource is loaded
   function ( gltf ) {
-    scene.add( gltf.scene );
-    dog = scene.getObjectByName("Root_Wurstgang");
-    dog.position.z = -10
+    scene = gltf.scene;
+    dog = scene.getObjectByName("Mesh");
+    dog.position.z = -7
     dog.position.y = 0
     mesh = dog.getObjectByName("Mesh");
     skele = mesh.skeleton
@@ -28,8 +28,14 @@ loader.load(
       color: 0xFFFFFF,
       map: mesh.material.map
     });
+    unlit.map.encoding = THREE.LinearEncoding
+    unlit.needsUpdate = true;
     mesh.material = unlit;
     dog.rotateY(3.14159);
+    // Skele Helper
+    var helper = new THREE.SkeletonHelper( mesh );
+    helper.material.linewidth = 3;
+    scene.add( helper );
   },
   // called when loading is in progresses
   function ( xhr ) {
@@ -47,14 +53,6 @@ loader.load(
 
 function animate() {
   if (dog) {
-
-          var time = Date.now() * 0.001;
-    
-					for ( var i = 0; i < mesh.skeleton.bones.length; i ++ ) {
-
-						mesh.skeleton.bones[ i ].rotation.z = Math.sin( time ) * 2 / mesh.skeleton.bones.length;
-
-					}
 
     dog.rotateY(-0.003);
 
