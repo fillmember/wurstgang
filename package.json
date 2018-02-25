@@ -1,0 +1,15 @@
+{
+  "name": "ik-wurst",
+  "version": "1.0.0",
+  "description": "This file describes your project to the community. What's your cool website about? What makes it special?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-config-mdcs": "^4.2.3",
+    "webpack": "^4.0.0"
+  }
+}
