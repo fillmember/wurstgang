@@ -1,7 +1,7 @@
 var THREE = window.THREE;
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 22, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.set( 0, 0, 30 );
+camera.position.set( 0, 2, - 30 );
 var renderer = new THREE.WebGLRenderer();
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setClearColor( 0x1B8547 );
@@ -12,17 +12,22 @@ var light = new THREE.DirectionalLight( 0xffffff, 1 );
 light.position.set( 0, 1, 0.5 );
 
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.033;
+// controls.autoRotate = true;
+// controls.autoRotateSpeed = 0.033;
 controls.enableDamping = true;
 controls.rotateSpeed = 0.3;
 controls.dampingFactor = 0.1;
 controls.enablePan = false;
 controls.enableZoom = false;
-controls.minPolarAngle = 0.15;
-controls.maxPolarAngle = 3.0;
 
-var dog, skele, bones;
+function smoothMove( current, target ) {
+
+	return current + ( target - current ) * 0.1;
+
+}
+
+var dog, skele, bones, headTarget;
+var iks = {};
 
 var boneID = {
 	"Pelvis": 0,
@@ -57,16 +62,21 @@ loader.load(
 			map: dog.material.map,
 			skinning: true,
 			emissive: 0xFFFFFF,
-			emissiveMap: dog.material.map
+			emissiveMap: dog.material.map,
+			// side: THREE.DoubleSide,
+			// side: THREE.BackSide,
+			// wireframe: true,
 		} );
 		dog.material = mat;
-		// Pose Init
-		// init a very cute pose
-		dog.rotateY( 3 * 0.66 );
-		bones[ 5 ].rotateY( 3 / 8 );
-		bones[ 6 ].rotateY( 1 / 8 );
-		bones[ 7 ].rotation.z = - 0.1;
-		bones[ 8 ].rotateY( 3 / 4 );
+
+		// LEG IK?
+		scene.updateMatrixWorld();
+
+		iks.head = new FABRIK( [
+			bones[ boneID.Shoulder ],
+			bones[ boneID.Neck ],
+			bones[ boneID.Head ],
+		], null );
 
 	},
 	function ( xhr ) {
@@ -92,10 +102,24 @@ function animate() {
 		bones[ 1 ].rotation.y = THREE.Math.degToRad( Math.sin( time ) * 5 );
 		bones[ 2 ].rotation.y = THREE.Math.degToRad( Math.sin( time ) * - 20 );
 		bones[ 3 ].rotation.y = THREE.Math.degToRad( Math.sin( time ) * - 30 );
-		// Looking
+		//
+
+		iks.head.refs.target.position.lerp(
+			camera.position.clone().add(
+				new THREE.Vector3(
+					mousePosition.x * 5 * camera.aspect,
+					mousePosition.y * 5,
+					- 25
+				).applyQuaternion( camera.quaternion )
+			),
+			0.1
+		);
+
+		iks.head.solve();
+		iks.head.apply();
+		bones[ boneID.Head ].rotateX( - 0.05 );
 
 	}
-	//
 	controls.update();
 	renderer.render( scene, camera );
 	//
@@ -122,7 +146,5 @@ window.addEventListener( "mousemove", function ( evt ) {
 
 	mousePosition.x = ( evt.clientX / window.innerWidth ) * 2 - 1;
 	mousePosition.y = - ( evt.clientY / window.innerHeight ) * 2 + 1;
-
-	// camera.position + camera.
 
 } );
