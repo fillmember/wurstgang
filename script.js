@@ -63,20 +63,19 @@ loader.load(
 			skinning: true,
 			emissive: 0xFFFFFF,
 			emissiveMap: dog.material.map,
-			// side: THREE.DoubleSide,
 			// side: THREE.BackSide,
-			// wireframe: true,
+			// wireframe: true
 		} );
 		dog.material = mat;
 
 		// LEG IK?
 		scene.updateMatrixWorld();
 
-		iks.head = new FABRIK( [
-			bones[ boneID.Shoulder ],
+		iks.head = new THREE.FABRIK( [
 			bones[ boneID.Neck ],
-			bones[ boneID.Head ],
+			bones[ boneID.Head ]
 		], null );
+		// iks.head.visualize( scene );
 
 	},
 	function ( xhr ) {
@@ -116,6 +115,7 @@ function animate() {
 		);
 
 		iks.head.solve();
+		// iks.head.visualize();
 		iks.head.apply();
 		bones[ boneID.Head ].rotateX( - 0.05 );
 

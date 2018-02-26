@@ -2,9 +2,17 @@
 
 class FABRIK {
 
-	constructor( jointsRef, targetRef ) {
+	constructor( jointsRef, targetRef, options = {} ) {
 
-		targetRef = targetRef || new THREE.Object3D();
+		const isTargetRefNull = targetRef === null || targetRef === undefined;
+		if ( isTargetRefNull ) {
+
+			targetRef = new THREE.Object3D();
+			targetRef.position.copy(
+				jointsRef[ jointsRef.length - 1 ].getWorldPosition()
+			);
+
+		}
 
 		const _joints = jointsRef.map( ( j )=>{
 
@@ -39,7 +47,7 @@ class FABRIK {
 			return obj;
 
 		} );
-		const _targetVis = new THREE.AxesHelper( 1 );
+		const _targetVis = new THREE.AxesHelper( 2 );
 		_targetVis.position.copy( _target );
 		this.refs.visualizers.push( _targetVis );
 
@@ -65,6 +73,29 @@ class FABRIK {
 		this.constraints.down = THREE.Math.degToRad( 89 );
 
 		return this;
+
+	}
+
+	visualize( scene ) {
+
+		if ( scene ) this.refs.visualizers.forEach( v=>scene.add( v ) );
+
+		this.refs.visualizers.forEach( ( v, index )=>{
+
+			if ( index === this.n ) {
+
+				v.position.copy( this.target );
+				v.rotation.copy( this.refs.target.rotation );
+
+			} else {
+
+				v.position.copy( this.joints[ index ] );
+				v.rotation.copy( this.refs.joints[ index ].rotation );
+
+			}
+
+
+		} );
 
 	}
 
@@ -129,25 +160,6 @@ class FABRIK {
 
 		}
 
-		// visualize
-
-		this.refs.visualizers.forEach( ( v, index )=>{
-
-			if ( index === this.n ) {
-
-				v.position.copy( this.target );
-				v.rotation.copy( this.refs.target.rotation );
-
-			} else {
-
-				v.position.copy( this.joints[ index ] );
-				v.rotation.copy( this.refs.joints[ index ].rotation );
-
-			}
-
-
-		} );
-
 	}
 	backward() {
 
@@ -187,3 +199,5 @@ class FABRIK {
 	}
 
 }
+
+THREE.FABRIK = FABRIK;
