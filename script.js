@@ -63,8 +63,7 @@ loader.load(
 			skinning: true,
 			emissive: 0xFFFFFF,
 			emissiveMap: dog.material.map,
-			// side: THREE.BackSide,
-			// wireframe: true
+			// side: THREE.BackSide
 		} );
 		dog.material = mat;
 
@@ -72,6 +71,8 @@ loader.load(
 		scene.updateMatrixWorld();
 
 		iks.head = new THREE.FABRIK( [
+			// bones[ boneID.Spine ],
+			// bones[ boneID.Shoulder ],
 			bones[ boneID.Neck ],
 			bones[ boneID.Head ]
 		], null );
@@ -115,9 +116,30 @@ function animate() {
 		);
 
 		iks.head.solve();
-		// iks.head.visualize();
-		iks.head.apply();
+		iks.head.apply( 0.2 );
+		bones[ boneID.Shoulder ].rotation.x = THREE.Math.clamp( bones[ boneID.Shoulder ].rotation.x, - 0.5, 0.5 );
+		bones[ boneID.Shoulder ].rotation.y = THREE.Math.clamp( bones[ boneID.Shoulder ].rotation.y, - 0.0, 0.0 );
+		bones[ boneID.Shoulder ].rotation.z = THREE.Math.clamp( bones[ boneID.Shoulder ].rotation.z, - 0.0, 0.0 );
+		bones[ boneID.Neck ].rotation.x = THREE.Math.clamp( bones[ boneID.Neck ].rotation.x, - 0.7, 0.7 );
+		bones[ boneID.Neck ].rotation.y = THREE.Math.clamp( bones[ boneID.Neck ].rotation.y, - 0.8, 0.8 );
+		bones[ boneID.Neck ].rotation.z = THREE.Math.clamp( bones[ boneID.Neck ].rotation.z, - 1.1, 1.1 );
+		bones[ boneID.Head ].rotation.x = THREE.Math.clamp( bones[ boneID.Head ].rotation.x, - 0.4, 0.1 );
+		bones[ boneID.Head ].rotation.y = THREE.Math.clamp( bones[ boneID.Head ].rotation.y, - 0.1, 0.1 );
+		bones[ boneID.Head ].rotation.z = THREE.Math.clamp( bones[ boneID.Head ].rotation.z, - 0.2, 0.2 );
 		bones[ boneID.Head ].rotateX( - 0.05 );
+		iks.head.refresh();
+		// iks.head.visualize();
+
+		// iks.armL.forward()
+		// iks.armR.forward()
+		// iks.armL.solve()
+		// iks.armR.solve()
+		//
+		// limit
+		//
+		// refresh
+		//
+		// visualize
 
 	}
 	controls.update();
