@@ -97,9 +97,11 @@ class FABRIK {
 
 		} );
 
+		return this;
+
 	}
 
-	apply() {
+	apply( lerpAlpha = 0.8 ) {
 
 		this.refs.joints.forEach( ( j, i )=>{
 
@@ -108,9 +110,11 @@ class FABRIK {
 			const q = j.quaternion.clone();
 			j.lookAt( localChildPosition );
 			j.rotateY( 3.14159 );
-			j.quaternion.slerp( q, 0.2 );
+			j.quaternion.slerp( q, 1 - lerpAlpha );
 
 		} );
+
+		return this;
 
 	}
 
@@ -160,6 +164,8 @@ class FABRIK {
 
 		}
 
+		return this;
+
 	}
 	backward() {
 
@@ -178,6 +184,8 @@ class FABRIK {
 
 		}
 
+		return this;
+
 	}
 	forward() {
 
@@ -195,6 +203,96 @@ class FABRIK {
 			this.joints[ i + 1 ].copy( pos );
 
 		}
+
+		return this;
+
+	}
+	refresh() {
+
+		this.refs.joints.forEach( ( j, i )=>{
+
+			const pos = j.getWorldPosition();
+			this.joints[ i ].copy( pos );
+
+		} );
+		this.origin = this.joints[ 0 ].clone();
+		this.target = this.refs.target.getWorldPosition();
+
+	}
+	constrain( calc, cone ) {
+
+		// calc : calculated of result form FABRIK algorithm
+		// line : cone's center axis
+		// cone : the cone matrix
+
+		const line = new THREE.Vector3( 0, 0, 1 ).applyMatrix4( cone );
+		const scalar = calc.dot( line ) / line.length();
+		const proj = line.clone().normalize().multiplyScalar( scalar );
+
+		// get axis that are closest
+		const ups = [
+			new THREE.Vector3( 0, 1, 0 ).applyMatrix4( cone ),
+			new THREE.Vector3( 0, - 1, 0 ).applyMatrix4( cone )
+		];
+		const downs = [
+			new THREE.Vector3( 1, 0, 0 ).applyMatrix4( cone ),
+			new THREE.Vector3( - 1, 0, 0 ).applyMatrix4( cone )
+		];
+
+		const sortFn = ( a, b )=>{
+
+			const _a = a.clone().sub( calc ).length();
+			const _b = b.clone().sub( calc ).length();
+			return _a - _b;
+
+		};
+		const upvec = ups.sort( sortFn )[ 0 ];
+		const rightvec = downs.sort( sortFn )[ 0 ];
+
+		// get the vector from the projection to the calculated vector
+		const adjust = new THREE.Vector3().subVectors( calc, proj );
+		scalar < 0 && proj.negate();
+
+		// get the 2D components
+		const xaspect = adjust.dot( rightvec );
+		const yaspect = adjust.dot( upvec );
+
+		// get the cross section of the cone
+		const left = - proj.length() * Math.tan( this.constraints.left );
+		const right = proj.length() * Math.tan( this.constraints.right );
+		const up = proj.length() * Math.tan( this.constraints.top );
+		const down = - proj.length() * Math.tan( this.constraints.down );
+
+		// find the quadrant
+		const xbound = xaspect >= 0 && right || left;
+		const ybound = yaspect >= 0 && up || down;
+
+		const f = calc.clone();
+
+		// check if in 2D point lies in the ellipse
+		const ellipse = Math.pow( xaspect, 2 ) / Math.pow( xbound, 2 )
+					  + Math.pow( yaspect, 2 ) / Math.pow( ybound, 2 );
+		const inbounds = ellipse <= 1 && scalar >= 0;
+
+		if ( ! inbounds ) {
+
+			// get the angle of our out of ellipse point
+			const a = Math.atan2( yaspect, xaspect );
+			// find the nearest point
+			const x = xbound * Math.cos( a );
+			const y = ybound * Math.sin( a );
+			// convert back to 3D
+			f.copy(
+				proj.clone()
+					.add( rightvec.clone().multiplyScalar( x ) )
+					.add( upvec.clone().multiplyScalar( y ) )
+					.normalize()
+					.multiplyScalar( calc.length() )
+			);
+
+		}
+
+		return f;
 
 	}
 
