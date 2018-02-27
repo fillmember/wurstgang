@@ -71,9 +71,9 @@ var pose = {
 
 	openMouth( lerp = 1 ) {
 
-		bones[ boneID.JawL_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.JawL_0 ].rotation.x, - 0.6, lerp );
+		bones[ boneID.JawL_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.JawL_0 ].rotation.x, - 1.0, lerp );
 		bones[ boneID.JawU_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.JawU_0 ].rotation.x, - 0.1, lerp );
-		constraints[ 4 ].offset.x = THREE.Math.lerp( constraints[ 4 ].offset.x, 0, lerp );
+		constraints[ 4 ].offset.x = THREE.Math.lerp( constraints[ 4 ].offset.x, 0.1, lerp );
 
 	},
 
