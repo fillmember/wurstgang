@@ -40,80 +40,27 @@ var boneID = {
 };
 var pose = {
 
-	rest( lerp = 0.001 ) {
-
-		const x = - 310;
-
-		bones[ boneID.Pelvis ].position.y = THREE.Math.lerp( bones[ boneID.Pelvis ].position.y, x, lerp );
-		bones[ boneID.Pelvis ].rotation.x = THREE.Math.lerp( bones[ boneID.Pelvis ].rotation.x, 0.125, lerp );
-
-		var a = 0.7; // leg turning forward
-		var ay = 0.45;
-		var pz = 1;
-
-		bones[ boneID.LegL_0 ].position.z = THREE.Math.lerp( bones[ boneID.LegL_0 ].position.z, pz, lerp );
-		bones[ boneID.LegR_0 ].position.z = THREE.Math.lerp( bones[ boneID.LegR_0 ].position.z, pz, lerp );
-		bones[ boneID.LegL_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegL_0 ].rotation.x, a, lerp );
-		bones[ boneID.LegR_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegR_0 ].rotation.x, a, lerp );
-		bones[ boneID.LegL_0 ].rotation.y = THREE.Math.lerp( bones[ boneID.LegL_0 ].rotation.y, ay, lerp );
-		bones[ boneID.LegR_0 ].rotation.y = THREE.Math.lerp( bones[ boneID.LegR_0 ].rotation.y, - ay, lerp );
-
-		var b = - 2;
-		var by = 0.5;
-
-		bones[ boneID.LegL_1 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegL_1 ].rotation.x, b, lerp );
-		bones[ boneID.LegR_1 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegR_1 ].rotation.x, b, lerp );
-		bones[ boneID.LegL_1 ].rotation.y = THREE.Math.lerp( bones[ boneID.LegL_1 ].rotation.y, by, lerp );
-		bones[ boneID.LegR_1 ].rotation.y = THREE.Math.lerp( bones[ boneID.LegR_1 ].rotation.y, - by, lerp );
-
-		var cx = - 1.1;
-		var cy = 0.25;
-
-		bones[ boneID.LegL_2 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegL_2 ].rotation.x, cx, lerp );
-		bones[ boneID.LegR_2 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegR_2 ].rotation.x, cx, lerp );
-		bones[ boneID.LegL_2 ].rotation.y = THREE.Math.lerp( bones[ boneID.LegL_2 ].rotation.y, cy, lerp );
-		bones[ boneID.LegR_2 ].rotation.y = THREE.Math.lerp( bones[ boneID.LegR_2 ].rotation.y, - cy, lerp );
-
-		var dx = 0;
-
-		bones[ boneID.LegL_3 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegL_3 ].rotation.x, dx, lerp );
-		bones[ boneID.LegR_3 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegR_3 ].rotation.x, dx, lerp );
-
-		var e = - 0.25;
-
-		bones[ boneID.ArmL_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.ArmL_0 ].rotation.x, e, lerp );
-		bones[ boneID.ArmR_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.ArmR_0 ].rotation.x, e, lerp );
-
-		var f = 0;
-
-		bones[ boneID.ArmL_2 ].rotation.x = THREE.Math.lerp( bones[ boneID.ArmL_2 ].rotation.x, f, lerp );
-		bones[ boneID.ArmR_2 ].rotation.x = THREE.Math.lerp( bones[ boneID.ArmR_2 ].rotation.x, f, lerp );
-
-	},
-
 	reset( lerp = 1 ) {
 
 		bones.forEach( b=>{
 
 			b.quaternion.slerp( b.userData.original.quaternion, lerp );
-			b.position.lerp( b.userData.original.position, lerp );
 
 		} );
 
 	},
 
 	vleg( lerp = 1 ) {
+    
+    var a = -1.335 // leg turns towards belly
+    var b = -0.35 // body incline -- Pelvis
+    var b2 = b * -0.5 // body incline -- Shoulder
+    var c = 0.3 // arm outward reach
+    var d = -0.65 // arm forward reach
+    var e = 0.5 // elbow rotation
+    var f = -0.8 // paw upward rotation
+    var g = -0.2 // paw tilt
 
-		var a = - 1.335; // leg turns towards belly
-		var b = - 0.35; // body incline -- Pelvis
-		var b2 = b * - 0.5; // body incline -- Shoulder
-		var c = 0.3; // arm outward reach
-		var d = - 0.65; // arm forward reach
-		var e = 0.5; // elbow rotation
-		var f = - 0.8; // paw upward rotation
-		var g = - 0.2; // paw tilt
-
-		bones[ boneID.Pelvis ].position.y = THREE.Math.lerp( bones[ boneID.Pelvis ].position.y, - 45.3435, lerp );
 		bones[ boneID.LegL_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegL_0 ].rotation.x, a, lerp );
 		bones[ boneID.LegR_0 ].rotation.x = THREE.Math.lerp( bones[ boneID.LegR_0 ].rotation.x, a, lerp );
 		bones[ boneID.Pelvis ].rotation.x = THREE.Math.lerp( bones[ boneID.Pelvis ].rotation.x, b, lerp );
@@ -178,15 +125,13 @@ var constraints = [
 
 var loader = new THREE.GLTFLoader();
 loader.load(
-	'./wt.glb',
-	// 'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519729859002',
+	'https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519729859002',
 	function ( gltf ) {
 
 		scene = gltf.scene;
-		// floor = new THREE.Mesh( new THREE.PlaneGeometry( 8, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0xFFFFFF, side: THREE.DoubleSide } ) ); // 0x1B8547
-		// floor.position.y = - 4.1;
-		// floor.rotateX( Math.PI / - 2 );
-		// scene.add( floor );
+    // floor = new THREE.Mesh(new THREE.PlaneGeometry(8,8,8),new THREE.MeshBasicMaterial({color:0xFFFFFF,side:THREE.DoubleSide})); // 0x1B8547
+    // floor.rotateX(Math.PI / -2)
+    // scene.add( floor )
 		scene.add( light );
 		dog = scene.getObjectByName( "Mesh" );
 		dog.position.y = - 0.4;
@@ -195,12 +140,11 @@ loader.load(
 		bones.forEach( b=>{
 
 			b.userData.original = {
-				position: b.position.clone(),
 				quaternion: b.quaternion.clone()
 			};
 
 		} );
-
+    
 		// Correct material
 		dog.material.map.encoding = THREE.LinearEncoding;
 		var mat = new THREE.MeshLambertMaterial( {
@@ -212,8 +156,6 @@ loader.load(
 			// side: THREE.BackSide
 		} );
 		dog.material = mat;
-
-		// scene.add( new THREE.SkeletonHelper( dog ) );
 
 		// IK
 		scene.updateMatrixWorld();
