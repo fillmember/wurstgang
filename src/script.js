@@ -129,7 +129,7 @@ var constraints = [
 
 var loader = new THREE.GLTFLoader()
 loader.load(
-	"https://cdn.glitch.com/c03493ab-dd08-4537-a1ff-7a40876e881f%2Fwt.glb?1519729859002",
+	"./model/wt.glb",
 	function ( gltf ) {
 
 		scene = gltf.scene

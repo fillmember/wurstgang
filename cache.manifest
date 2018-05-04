@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-style.css
-three.min.js
-bundle.js
-wt.glb
+css/styles.css
+js/three.min.js
+js/bundle.js
+model/wt.glb
