@@ -1,0 +1,27 @@
+{
+  "name": "mutate-space-website",
+  "version": "0.0.1",
+  "description": "yee",
+  "main": "build/index.js",
+  "scripts": {
+    "build-js": "webpack --mode production ./src/script.js -o ./bundle.js",
+    "build": "npm run build-js",
+    "browser-sync": "browser-sync start --server --files './index.js, ./bundle.js, ./*.css'",
+    "watch-js": "webpack --watch --mode development ./src/script.js -o ./bundle.js",
+    "dev": "npm run watch-js | npm run browser-sync",
+    "yee": "surge . yee.dog"
+  },
+  "author": "ten",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "webpack": "^4.2.0",
+    "webpack-cli": "^2.0.13"
+  },
+  "dependencies": {
+    "gsap": "^1.20.4"
+  }
+}
