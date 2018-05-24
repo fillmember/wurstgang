@@ -6,7 +6,7 @@
   "scripts": {
     "build-js": "webpack --mode production ./src/script.js -o ./js/bundle.js",
     "build": "npm run build-js",
-    "browser-sync": "browser-sync start --server --files './index.html, ./js/*.js, ./css/*.css'",
+    "browser-sync": "browser-sync start --server --files './js/*.js, ./css/*.css'",
     "watch-js": "webpack --watch --mode development ./src/script.js -o ./js/bundle.js",
     "dev": "npm run watch-js | npm run browser-sync",
     "yee": "surge . yee.dog"
